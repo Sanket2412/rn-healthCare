@@ -27,30 +27,30 @@ const EmergencyDetails = (props) => {
   };
   return (
     <View style={styles.content}>
-      <Card elevation={10}>
-        <Card.Title
-          title="🚨FOR EMERGENCY🚨"
-          titleStyle={styles.titleText}
-          style={styles.title}
-        />
+      <Card elevation={10} style={{ borderRadius: 10 }}>
         <Card.Content>
+          <Card.Title
+            title="🚨FOR EMERGENCY🚨"
+            titleStyle={styles.titleText}
+            style={styles.title}
+          />
           <Title>{Doctor.name}</Title>
           <Title>{Doctor.clinicAddress}</Title>
         </Card.Content>
-        <TouchableHighlight
-          style={{ backgroundColor: "#02b32e" }}
-          onPress={dialCall}
-        >
-          <Text>CALL</Text>
-        </TouchableHighlight>
+        <Card.Actions style={styles.action}>
+          <View style={{ width: "100%" }}>
+            <Button icon="phone" mode="contained" onPress={dialCall} style={styles.button}>
+              Call
+            </Button>
+          </View>
+        </Card.Actions>
       </Card>
     </View>
   );
 };
 const styles = StyleSheet.create({
   content: {
-    margin: 20,
-    backgroundColor: "#039dfc",
+    margin: 15,
   },
   titleText: {
     textAlign: "center",
@@ -58,7 +58,15 @@ const styles = StyleSheet.create({
   },
   title: {
     backgroundColor: "#fc4444",
-    padding: 5,
+    borderRadius: 10,
+  },
+  action: {
+    flex: 1,
+    flexDirection: "row-reverse",
+  },
+  button: {
+    backgroundColor: "green",
+    borderRadius:10,
   },
 });
 export default EmergencyDetails;

@@ -6,7 +6,7 @@ import EmergencyDetails from "../component/Patient/HomePage/EmergencyDetails";
 const { height, width } = Dimensions.get("window");
 const HomeScreen = (props) => {
   return (
-    <ScrollView>
+    <ScrollView style={styles.main}>
       <Appbar.Header style={styles.app}>
         <Appbar.Content title="Home" subtitle={`Hello Sanket`} />
       </Appbar.Header>
@@ -23,6 +23,9 @@ const styles = StyleSheet.create({
   },
   container: {
     marginTop: height / 11,
+  },
+  main: {
+    backgroundColor: "#ffedff",
   },
 });
 export default HomeScreen;

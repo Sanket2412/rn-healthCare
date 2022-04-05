@@ -1,15 +1,25 @@
-import React from "react";
+import React, {useLayoutEffect} from "react";
 import { View, StyleSheet, ScrollView, Dimensions } from "react-native";
-import { Appbar } from "react-native-paper";
+import { Button } from "react-native-paper";
 import EmergencyDetails from "../component/Patient/HomePage/EmergencyDetails";
 
 const { height, width } = Dimensions.get("window");
 const HomeScreen = (props) => {
+  useLayoutEffect(() => {
+    props.navigation.setOptions({
+      headerRight: () => (
+        <Button
+          icon="account-box"
+          labelStyle={{ fontSize: 27 }}
+          onPress={() => console.log("Pressed")}
+          title=""
+          color="white"
+        />
+      ),
+    });
+  }, [props.navigation]);
   return (
-    <ScrollView style={styles.main}>
-      <Appbar.Header style={styles.app}>
-        <Appbar.Content title="Home" subtitle={`Hello Sanket`} />
-      </Appbar.Header>
+    <ScrollView style={styles.app}>
       <View style={styles.container}>
         <EmergencyDetails />
       </View>
@@ -19,13 +29,12 @@ const HomeScreen = (props) => {
 
 const styles = StyleSheet.create({
   app: {
-    backgroundColor: "#039dfc",
+    flex:1,
+    backgroundColor: "#ffedff",
+    //backgroundColor: "#039dfc",
   },
   container: {
     marginTop: height / 11,
-  },
-  main: {
-    backgroundColor: "#ffedff",
   },
 });
 export default HomeScreen;

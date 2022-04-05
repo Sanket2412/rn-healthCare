@@ -10,7 +10,7 @@ import {
 import { Button, Card, Paragraph, Title } from "react-native-paper";
 const Doctor = {
   name: "🧑‍⚕️Dr. Shah",
-  phoneNumber: 9988775566,
+  phoneNumber: 8087309626,
   clinicAddress: "🏥Demo Address Near Demo Road!",
 };
 const EmergencyDetails = (props) => {
@@ -27,7 +27,7 @@ const EmergencyDetails = (props) => {
   };
   return (
     <View style={styles.content}>
-      <Card elevation={10} style={{ borderRadius: 10 }}>
+      <Card elevation={20} style={{ borderRadius: 10 }}>
         <Card.Content>
           <Card.Title
             title="🚨FOR EMERGENCY🚨"
@@ -50,6 +50,7 @@ const EmergencyDetails = (props) => {
 };
 const styles = StyleSheet.create({
   content: {
+    flex:1,
     margin: 15,
   },
   titleText: {

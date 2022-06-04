@@ -2,7 +2,6 @@ import React from "react";
 import { StyleSheet, Text, View, Image,TouchableOpacity } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import Feather from "react-native-vector-icons/Feather";
 
 import HomeScreen from "../screens/HomeScreen";
 import HistoryScreen from "../screens/HistoryScreen";
@@ -38,7 +37,7 @@ const tabsBottomNavigation = (props) => {
         },
       headerTintColor:"white",
         tabBarShowLabel: false,
-        tabBarActiveTintColor:"#AD40AF",
+        tabBarActiveTintColor:"green",
         tabBarInactiveTintColor:"#ffffff",
         tabBarStyle: {
           position: "absolute",

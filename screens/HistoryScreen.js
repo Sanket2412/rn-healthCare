@@ -1,10 +1,10 @@
 import react from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text,ImageBackground } from "react-native";
 const HistoryScreen=(props)=>{
     return(
-        <View style={styles.container}>
+        <ImageBackground source={{uri:"https://d2gg9evh47fn9z.cloudfront.net/800px_COLOURBOX26510670.jpg"}} style={styles.container}>
             <Text>History Screen</Text>
-        </View>
+        </ImageBackground>
     );
 }
 const styles= StyleSheet.create({
@@ -12,7 +12,7 @@ const styles= StyleSheet.create({
         flex:1,
         alignItems:'center',
         justifyContent:'center',
-        backgroundColor: "#ffedff",
+        backgroundColor: "white",
     }
 })
 

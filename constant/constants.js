@@ -1,0 +1,1 @@
+export const background="https://png.pngtree.com/thumb_back/fh260/background/20190222/ourmid/pngtree-blue-hospital-medical-western-medicine-poster-background-backgroundmedical-backgrounddoctor-backgroundhospital-image_63770.jpg";

@@ -1,8 +1,9 @@
-import react from "react";
-import { View, StyleSheet, Text,ImageBackground } from "react-native";
+import React from "react";
+import {  StyleSheet, Text,ImageBackground } from "react-native";
+import { background } from "../../constant/constants";
 const HistoryScreen=(props)=>{
     return(
-        <ImageBackground source={{uri:"https://d2gg9evh47fn9z.cloudfront.net/800px_COLOURBOX26510670.jpg"}} style={styles.container}>
+        <ImageBackground source={{uri:background}} style={styles.container}>
             <Text>History Screen</Text>
         </ImageBackground>
     );

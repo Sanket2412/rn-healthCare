@@ -1,41 +1,15 @@
 import React from "react";
-import { StyleSheet, Text, View, Image,TouchableOpacity } from "react-native";
+import { StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "react-native-vector-icons/Ionicons";
-
-import HomeScreen from "../screens/HomeScreen";
-import HistoryScreen from "../screens/HistoryScreen";
-import MedicalPrescriptionScreen from "../screens/MedicalPrescriptionScreen";
-import MedicalTestScreen from "../screens/MedicalTestScreen";
-
-
+import { PrescriptionNavigator, HomeNavigator, TestNavigator, HistoryNavigator } from "./stackNavigators";
 const Tab = createBottomTabNavigator();
-const CustomTabBarButton=(props)=>{
-  <TouchableOpacity style={{
-    top:-30,
-    justifyContent:'center',
-    alignItems:'center',
-    ...styles.shadow,
-  }} onPress={props.onPress}>
-    <View style={{
-      width:70,
-      height:70,
-      borderRadius:35,
-      backgroundColor:'#AD40AF',
 
-    }}>
-      {props.children}
-    </View>
-  </TouchableOpacity>
-}
 const tabsBottomNavigation = (props) => {
   return (
     <Tab.Navigator
       screenOptions={{
-      headerStyle:{
-          backgroundColor:"#039dfc",
-        },
-      headerTintColor:"white",
+        headerShown:false,
         tabBarShowLabel: false,
         tabBarActiveTintColor:"green",
         tabBarInactiveTintColor:"#ffffff",
@@ -54,8 +28,8 @@ const tabsBottomNavigation = (props) => {
       }}
     >
       <Tab.Screen
-        name="Home"
-        component={HomeScreen}
+        name="TabHome"
+        component={HomeNavigator}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="home-outline" color={color} size={size} />
@@ -63,18 +37,17 @@ const tabsBottomNavigation = (props) => {
         }}
       />
       <Tab.Screen
-        name="Prescription"
-        component={MedicalPrescriptionScreen}
+        name="TabPrescription"
+        component={PrescriptionNavigator}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="clipboard-outline" color={color} size={size} />
           ),
         }}
       />
-      
       <Tab.Screen
-        name="Test"
-        component={MedicalTestScreen}
+        name="TabTest"
+        component={TestNavigator}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="list-outline" color={color} size={size} />
@@ -82,8 +55,8 @@ const tabsBottomNavigation = (props) => {
         }}
       />
       <Tab.Screen
-        name="History"
-        component={HistoryScreen}
+        name="TabHistory"
+        component={HistoryNavigator}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="swap-horizontal-outline" color={color} size={size} />

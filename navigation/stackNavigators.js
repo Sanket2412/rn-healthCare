@@ -7,6 +7,7 @@ import HomeScreen from "../screens/PatientScreens/HomeScreen";
 import HistoryScreen from "../screens/PatientScreens/HistoryScreen";
 import ProfileScreen from "../screens/PatientScreens/ProfileScreen";
 import TestDetailedScreen from "../screens/PatientScreens/TestDetailedScreen";
+import AuthScreen from "../screens/AuthScreens/AuthScreen";
 const defaultScreenOptions={
     headerStyle: {
       backgroundColor: "#039dfc",
@@ -18,7 +19,7 @@ const PrescriptionStackNavigator = createNativeStackNavigator();
 const HomeStackNavigator=createNativeStackNavigator();
 const TestStackNavigator=createNativeStackNavigator();
 const HistoryStackNavigator=createNativeStackNavigator();
-
+const AuthStackNavigator=createNativeStackNavigator();
 export const HistoryNavigator=()=>{
     return(
         <HistoryStackNavigator.Navigator screenOptions={defaultScreenOptions}>
@@ -59,3 +60,11 @@ export const PrescriptionNavigator = () => {
     </PrescriptionStackNavigator.Navigator>
   );
 };
+
+export const AuthNavigator=()=>{
+  return(
+    <AuthStackNavigator.Navigator screenOptions={defaultScreenOptions}>
+      <AuthStackNavigator.Screen name="Auth" component={AuthScreen} options={{title:"Authentication"}}/>
+    </AuthStackNavigator.Navigator>
+  );
+}

@@ -1,0 +1,1 @@
+export const defaultApiUrl="https://rn-healthcare-default-rtdb.firebaseio.com/";

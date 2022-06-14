@@ -6,12 +6,13 @@ import {
   Linking,
   ImageBackground,
 } from "react-native";
+import { useDispatch,useSelector } from "react-redux";
 import { Button } from "react-native-paper";
 import { Fragment } from "react";
 import VisitsList from "../../component/Patient/HomeScreen/VisitsList";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import { background } from "../../constant/constants";
-
+import * as authActions from "../../store/actions/auth";
 const { height } = Dimensions.get("window");
 const Doctor = {
   name: "🧑‍⚕️Dr. Shah",
@@ -19,6 +20,7 @@ const Doctor = {
   clinicAddress: "🏥Demo Address Near Demo Road!",
 };
 const HomeScreen = (props) => {
+  const dispatch = useDispatch();
   const [bookAppointment, setBookAppointment] = useState(false);
   const [bookingDate, setBookingDate] = useState();
   const dialCall = () => {
@@ -36,15 +38,24 @@ const HomeScreen = (props) => {
         <Fragment>
           <View style={{ flexDirection: "row-reverse" }}>
             <Button
+              icon="logout"
+              labelStyle={{ fontSize: 24 }}
+              onPress={() => {
+                dispatch(authActions.logout());
+              }}
+              title=""
+              color="white"
+            />
+            <Button
               icon="account-box"
-              labelStyle={{ fontSize: 27 }}
-              onPress={() => props.navigation.navigate('Profile')}
+              labelStyle={{ fontSize: 24 }}
+              onPress={() => props.navigation.navigate("Profile")}
               title=""
               color="white"
             />
             <Button
               icon="phone"
-              labelStyle={{ fontSize: 27 }}
+              labelStyle={{ fontSize: 24 }}
               onPress={dialCall}
               title=""
               color="white"

@@ -1,13 +1,14 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import MedicalPrescriptionScreen from "../screens/PatientScreens/MedicalPrescriptionScreen";
-import PrescriptionDetailedScreen from "../screens/PatientScreens/PrescriptionDetailedScreen";
-import MedicalTestScreen from "../screens/PatientScreens/MedicalTestScreen";
-import HomeScreen from "../screens/PatientScreens/HomeScreen";
-import HistoryScreen from "../screens/PatientScreens/HistoryScreen";
-import ProfileScreen from "../screens/PatientScreens/ProfileScreen";
-import TestDetailedScreen from "../screens/PatientScreens/TestDetailedScreen";
-import AuthScreen from "../screens/AuthScreens/AuthScreen";
+import MedicalPrescriptionScreen from "../../screens/PatientScreens/MedicalPrescriptionScreen";
+import PrescriptionDetailedScreen from "../../screens/PatientScreens/PrescriptionDetailedScreen";
+import MedicalTestScreen from "../../screens/PatientScreens/MedicalTestScreen";
+import HomeScreen from "../../screens/PatientScreens/HomeScreen";
+import HistoryScreen from "../../screens/PatientScreens/HistoryScreen";
+import ProfileScreen from "../../screens/PatientScreens/ProfileScreen";
+import TestDetailedScreen from "../../screens/PatientScreens/TestDetailedScreen";
+import AuthScreen from "../../screens/AuthScreens/AuthScreen";
+import ForgotPasswordScreen from "../../screens/AuthScreens/ForgotPasswordScreen";
 const defaultScreenOptions={
     headerStyle: {
       backgroundColor: "#039dfc",
@@ -40,7 +41,7 @@ export const HomeNavigator=()=>{
     return(
         <HomeStackNavigator.Navigator screenOptions={defaultScreenOptions}>
             <HomeStackNavigator.Screen name="Home" component={HomeScreen}/>
-            <HomeStackNavigator.Screen name="Profile" component={ProfileScreen} />
+            <HomeStackNavigator.Screen name="Profile" component={ProfileScreen}/>
         </HomeStackNavigator.Navigator>
     );
 }
@@ -65,6 +66,7 @@ export const AuthNavigator=()=>{
   return(
     <AuthStackNavigator.Navigator screenOptions={defaultScreenOptions}>
       <AuthStackNavigator.Screen name="Auth" component={AuthScreen} options={{title:"Authentication"}}/>
+      <AuthStackNavigator.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{ headerBackVisible:false}} />
     </AuthStackNavigator.Navigator>
   );
 }

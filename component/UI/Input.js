@@ -1,4 +1,5 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer, useState } from "react";
+import { Button } from "react-native-paper";
 import { StyleSheet, View, Text, TextInput } from "react-native";
 const INPUT_CHANGE = "INPUT_CHANGE";
 const INPUT_BLUR = "INPUT_BLUR";
@@ -26,6 +27,7 @@ const Input = (props) => {
     isValid: props.initiallyValid,
     touched: false,
   });
+  const [showPassword, setShowPassword]=useState(false);
   const textChangeHandler = (text) => {
     const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
     const numberRegex=/\d/;
@@ -73,14 +75,17 @@ const Input = (props) => {
   return (
     <View style={styles.formControl}>
       <Text style={styles.label}>{props.label}</Text>
+      <View style={props.password ? styles.passwordContainer : null}>
       <TextInput
-        style={styles.input}
+        style={!props.password ? styles.input: styles.passwordInput}
         {...props}
+        secureTextEntry={!props.password ? false : !showPassword }
         onBlur={lostFocusHandler}
         value={inputState.value}
         onChangeText={textChangeHandler}
         keyboardAppearance="default"
       />
+      {props.password ? <Button  color="black" icon={showPassword ? "eye": "eye-off"} onPress={()=>{ setShowPassword(!showPassword)}}/>: null}</View>
       {!inputState.isValid && inputState.touched && (
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>{props.errorText}</Text>
@@ -95,6 +100,19 @@ const styles = StyleSheet.create({
   },
   label: {
     marginVertical: 8,
+  },
+  passwordContainer:{
+    flexDirection:"row",
+    paddingLeft: 22,
+    borderBottomColor: "#ccc",
+    borderBottomWidth: 1,
+    justifyContent:"space-evenly",
+    alignItems:"flex-start"
+  },
+  passwordInput:{
+    width:"100%",
+    paddingHorizontal: 2,
+    paddingVertical: 5,
   },
   input: {
     paddingHorizontal: 2,

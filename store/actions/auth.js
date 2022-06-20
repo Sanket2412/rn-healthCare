@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { API_KEY } from "../../config/config";
 export const AUTHENTICATE = "AUTHENTICATE";
 export const LOGOUT = "LOGOUT";
 export const SET_DID_TRY_AL = "SET_DID_TRY_AL";
@@ -17,7 +18,7 @@ export const authenticate = (userId, token, expiryTime) => {
 export const login = (email, password) => {
     return async (dispatch) => {
       const response = await fetch(
-        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBDcwnejdj6BW0lO0EYdEuq94Zp-dUQyM4",
+        `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${API_KEY}`,
         {
           method: "POST",
           headers: {
@@ -47,7 +48,7 @@ export const login = (email, password) => {
 
 export const signup=(email,password)=>{
     return async(dispatch)=>{
-        const response= await fetch("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBDcwnejdj6BW0lO0EYdEuq94Zp-dUQyM4",{ method:"POST", headers:{"Content-Type":"application/json",}, body: JSON.stringify({
+        const response= await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${API_KEY}`,{ method:"POST", headers:{"Content-Type":"application/json",}, body: JSON.stringify({
             email:email,
             password:password,
             returnSecureToken:true,

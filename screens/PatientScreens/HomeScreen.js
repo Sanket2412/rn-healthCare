@@ -6,7 +6,7 @@ import {
   Linking,
   ImageBackground,
 } from "react-native";
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Button } from "react-native-paper";
 import { Fragment } from "react";
 import VisitsList from "../../component/Patient/HomeScreen/VisitsList";

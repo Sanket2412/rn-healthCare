@@ -1,17 +1,12 @@
 import React, {
   useReducer,
-  useEffect,
   useCallback,
   useState,
   Fragment,
+  useEffect,
 } from "react";
-import {
-  View,
-  KeyboardAvoidingView,
-  ScrollView,
-  StyleSheet,
-  ActivityIndicator,
-} from "react-native";
+import { View, ScrollView, StyleSheet, ActivityIndicator } from "react-native";
+import { LogBox } from "react-native";
 import { Button, Snackbar } from "react-native-paper";
 import Input from "../../component/UI/Input";
 import { Card } from "react-native-paper";
@@ -19,7 +14,11 @@ import { useDispatch } from "react-redux";
 import * as authActions from "../../store/actions/auth";
 import * as userActions from "../../store/actions/users";
 import { ImageBackground } from "react-native";
-import { background } from "../../constant/constants";
+import { background,bloodGroupData } from "../../constant/constants";
+import { Dropdown } from "react-native-material-dropdown-v2-fixed";
+import { TouchableOpacity,Text } from "react-native";
+import ProfilePicPicker from "../../component/UI/ProfilePicPicker";
+import { uploadImage } from "../../firebase/UploadImage";
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 const formReducer = (state, action) => {
   if (action.type === FORM_INPUT_UPDATE) {
@@ -45,10 +44,10 @@ const formReducer = (state, action) => {
 };
 const AuthScreen = (props) => {
   const dispatch = useDispatch();
-  const [showPassword, setShowPassword]=useState(false)
   const [isLoading, setIsLoading] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
   const [isError, setIsError] = useState(false);
+  const[profilePic,setProfilePic]=useState("");
   const [error, setError] = useState();
   const defaultValues = isSignup
     ? {
@@ -57,6 +56,7 @@ const AuthScreen = (props) => {
           password: "",
           age: 0,
           name: "",
+          bloodGroup:"",
           phone: "",
           address: "",
         },
@@ -64,6 +64,7 @@ const AuthScreen = (props) => {
           email: false,
           password: false,
           age: false,
+          bloodGroup:false,
           name: false,
           phone: false,
           address: false,
@@ -81,6 +82,12 @@ const AuthScreen = (props) => {
         },
         formIsValid: false,
       };
+    const profilePicUpdateHandler=(url)=>{
+      setProfilePic(url);
+    }
+  useEffect(()=>{
+    LogBox.ignoreLogs(['Animated:']);
+  },[LogBox])
   const [formState, dispatchFormState] = useReducer(formReducer, defaultValues);
   const authHandler = async () => {
     let action;
@@ -99,22 +106,26 @@ const AuthScreen = (props) => {
     setIsLoading(true);
     try {
       await dispatch(action);
+      if (isSignup && !isError) {
+        const imageUrl=await uploadImage(profilePic,formState.inputValues.name);
+        await console.log(imageUrl);
+        await dispatch(
+          userActions.addUser({
+            name: formState.inputValues.name,
+            age: formState.inputValues.age,
+            phone: formState.inputValues.phone,
+            userType:"patient",
+            bloodGroup: formState.inputValues.bloodGroup,
+            email: formState.inputValues.email,
+            profilePic: await imageUrl,
+            address: formState.inputValues.address,
+          })
+        );
+      }
     } catch (err) {
       setIsError(true);
       setError(err.message);
       setIsLoading(false);
-    }
-    if (isSignup && !isError) {
-      await dispatch(
-        userActions.addUser({
-          name: formState.inputValues.name,
-          age: formState.inputValues.age,
-          phone: formState.inputValues.phone,
-          bloodGroup: "B+",
-          email: formState.inputValues.email,
-          address: formState.inputValues.address,
-        })
-      );
     }
   };
   const inputChangeHandler = useCallback(
@@ -149,9 +160,12 @@ const AuthScreen = (props) => {
       </Snackbar>
       <View style={styles.cardContainer}>
         <Card elevation={50} style={styles.authContainer}>
-        <Card.Title title={isSignup ? "Sign In": "Login"} titleStyle={{color:"green", textAlign:"left",fontSize:30}}/>
-        <ScrollView>
-          <Card.Content>
+          <Card.Title
+            title={isSignup ? "Sign In" : "Login"}
+            titleStyle={{ color: "green", textAlign: "left", fontSize: 30 }}
+          />
+          <ScrollView>
+            <Card.Content>
               {isSignup ? (
                 <Fragment>
                   <Input
@@ -188,6 +202,16 @@ const AuthScreen = (props) => {
                     onInputChange={inputChangeHandler}
                     initialValue=""
                   />
+                  <Dropdown
+                    icon="chevron-down"
+                    iconColor="#E1E1E1"
+                    useNativeDriver={true}
+                    label="Blood Group"
+                    data={bloodGroupData}
+                    onChangeText={(value) => {
+                      inputChangeHandler("bloodGroup",value,true);
+                    }}
+                  />
                   <Input
                     id="address"
                     label="Address"
@@ -216,41 +240,44 @@ const AuthScreen = (props) => {
                 id="password"
                 label="Password"
                 keyboardType="default"
-                secureTextEntry={!showPassword}
+                password
                 required
                 minLength={5}
                 autoCapitalize="none"
                 errorText="Please Enter a Valid Password"
                 onInputChange={inputChangeHandler}
                 initialValue=""
-              /><Button color="black" icon={showPassword ? "eye": "eye-off"} onPress={()=>{ setShowPassword(!showPassword)}}/>
-            
-          <Card.Actions style={styles.cardAction}>
-            {isLoading ? (
-              <ActivityIndicator size="small" />
-            ) : (
-              <Button
-                mode="contained"
-                color="green"
-                disabled={!formState.formIsValid}
-                style={{ width: 165, marginBottom: 10 }}
-                onPress={authHandler}
-              >
-                {isSignup ? "Signup" : "Login"}
-              </Button>
-            )}
-            <Button
-              mode="contained"
-              color="orange"
-              style={{ width: 165, marginBottom: 10 }}
-              onPress={() => {
-                setIsSignup((prevState) => !prevState);
-              }}
-            >
-              {`Switch to ${isSignup ? "Login" : "Sign Up"}`}
-            </Button>
-          </Card.Actions>
-          </Card.Content>
+              />
+              {isSignup ? <ProfilePicPicker onProfileUpdate={profilePicUpdateHandler}/> : null}
+              <Card.Actions style={styles.cardAction}>
+                {isLoading ? (
+                  <ActivityIndicator size="small" />
+                ) : (
+                  <Button
+                    mode="contained"
+                    color="green"
+                    disabled={!formState.formIsValid}
+                    style={{ width: 165, marginBottom: 10 }}
+                    onPress={authHandler}
+                  >
+                    {isSignup ? "Signup" : "Login"}
+                  </Button>
+                )}
+                <Button
+                  mode="contained"
+                  color="orange"
+                  style={{ width: 165, marginBottom: 10 }}
+                  onPress={() => {
+                    setIsSignup((prevState) => !prevState);
+                  }}
+                >
+                  {`Switch to ${isSignup ? "Login" : "Sign Up"}`}
+                </Button>
+                {!isSignup ? <TouchableOpacity onPress={()=>{props.navigation.navigate("ForgotPassword") }}>
+                  <Text style={{color:"blue"}}>Forgot Password?</Text>
+                </TouchableOpacity> : null}
+              </Card.Actions>
+            </Card.Content>
           </ScrollView>
         </Card>
       </View>
@@ -274,7 +301,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   cardAction: {
-    marginTop: 10,
+    marginTop: 5,
     flexDirection: "column",
     justifyContent: "space-around",
     alignItems: "center",

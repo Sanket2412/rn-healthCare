@@ -48,6 +48,7 @@ const AuthScreen = (props) => {
   const [isSignup, setIsSignup] = useState(false);
   const [isError, setIsError] = useState(false);
   const[profilePic,setProfilePic]=useState("");
+  const [isUploading,setIsUploading]=useState(false);
   const [error, setError] = useState();
   const defaultValues = isSignup
     ? {
@@ -82,7 +83,8 @@ const AuthScreen = (props) => {
         },
         formIsValid: false,
       };
-    const profilePicUpdateHandler=(url)=>{
+    const profilePicUpdateHandler=(url,uploadingStatus)=>{
+      setIsUploading(uploadingStatus);
       setProfilePic(url);
     }
   useEffect(()=>{
@@ -107,8 +109,6 @@ const AuthScreen = (props) => {
     try {
       await dispatch(action);
       if (isSignup && !isError) {
-        const imageUrl=await uploadImage(profilePic,formState.inputValues.name);
-        await console.log(imageUrl);
         await dispatch(
           userActions.addUser({
             name: formState.inputValues.name,
@@ -117,7 +117,7 @@ const AuthScreen = (props) => {
             userType:"patient",
             bloodGroup: formState.inputValues.bloodGroup,
             email: formState.inputValues.email,
-            profilePic: await imageUrl,
+            profilePic: profilePic,
             address: formState.inputValues.address,
           })
         );
@@ -168,6 +168,7 @@ const AuthScreen = (props) => {
             <Card.Content>
               {isSignup ? (
                 <Fragment>
+                  <ProfilePicPicker onProfileUpdate={profilePicUpdateHandler}/> 
                   <Input
                     id="name"
                     label="Name"
@@ -248,7 +249,6 @@ const AuthScreen = (props) => {
                 onInputChange={inputChangeHandler}
                 initialValue=""
               />
-              {isSignup ? <ProfilePicPicker onProfileUpdate={profilePicUpdateHandler}/> : null}
               <Card.Actions style={styles.cardAction}>
                 {isLoading ? (
                   <ActivityIndicator size="small" />
@@ -256,7 +256,7 @@ const AuthScreen = (props) => {
                   <Button
                     mode="contained"
                     color="green"
-                    disabled={!formState.formIsValid}
+                    disabled={!formState.formIsValid || isUploading}
                     style={{ width: 165, marginBottom: 10 }}
                     onPress={authHandler}
                   >

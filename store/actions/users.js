@@ -21,6 +21,7 @@ export const fetchUsers = () => {
           email:resData[key].email,
           address:resData[key].address,
           age:resData[key].age,
+          profilePic:resData[key].profilePic,
           bloodGroup:resData[key].bloodGroup,
           userId:resData[key].userId,
           userType:resData[key].userType,

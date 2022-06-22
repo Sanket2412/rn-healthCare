@@ -17,6 +17,7 @@ export default function App() {
     LogBox.ignoreLogs(["Animated:`useNativeDriver`"]);
     LogBox.ignoreLogs(["exported from 'deprecated-react-native-prop-types'."]);
     LogBox.ignoreLogs(["componentWillReceiveProps has been renamed, and is not recommended for use."]);
+    LogBox.ignoreLogs(['AsyncStorage has been extracted from react-native core']);
   }, [LogBox]);
   
   return (

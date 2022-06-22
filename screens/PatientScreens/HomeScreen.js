@@ -3,11 +3,12 @@ import {
   View,
   StyleSheet,
   Dimensions,
+  TouchableOpacity,
   Linking,
   ImageBackground,
 } from "react-native";
-import { useDispatch } from "react-redux";
-import { Button } from "react-native-paper";
+import { useDispatch, useSelector } from "react-redux";
+import { Button, Avatar } from "react-native-paper";
 import { Fragment } from "react";
 import VisitsList from "../../component/Patient/HomeScreen/VisitsList";
 import DateTimePicker from "react-native-modal-datetime-picker";
@@ -23,6 +24,7 @@ const HomeScreen = (props) => {
   const dispatch = useDispatch();
   const [bookAppointment, setBookAppointment] = useState(false);
   const [bookingDate, setBookingDate] = useState();
+  const userLoggedIn = useSelector((state) => state.user.loggedInUser);
   const dialCall = () => {
     let phoneNumber = "";
     if (Platform.OS === "android") {
@@ -32,6 +34,7 @@ const HomeScreen = (props) => {
     }
     Linking.openURL(phoneNumber);
   };
+  console.log(userLoggedIn);
   useLayoutEffect(() => {
     props.navigation.setOptions({
       headerRight: () => (
@@ -39,6 +42,7 @@ const HomeScreen = (props) => {
           <View style={{ flexDirection: "row-reverse" }}>
             <Button
               icon="logout"
+              style={{marginLeft:15}}
               labelStyle={{ fontSize: 24 }}
               onPress={() => {
                 dispatch(authActions.logout());
@@ -46,15 +50,12 @@ const HomeScreen = (props) => {
               title=""
               color="white"
             />
-            <Button
-              icon="account-box"
-              labelStyle={{ fontSize: 24 }}
-              onPress={() => props.navigation.navigate("Profile")}
-              title=""
-              color="white"
-            />
+            <TouchableOpacity onPress={() => props.navigation.navigate("Profile")} style={{margin:5}}>
+              {userLoggedIn.profilePic!==null ? <Avatar.Text style={{backgroundColor:"#76BA99"}} color="white" label={userLoggedIn.name.substring(0,1)} size={35} /> :<Avatar.Image size={40} source={{uri:userLoggedIn.profilePic}}/> }
+            </TouchableOpacity>
             <Button
               icon="phone"
+              style={{marginRight:5}}
               labelStyle={{ fontSize: 24 }}
               onPress={dialCall}
               title=""

@@ -1,5 +1,7 @@
 export const ADD_USER = "ADD_USER";
+export const LOGOUT="LOGOUT";
 export const SET_USERS = "SET_USERS";
+export const UPDATE_USER="UPDATE_USER";
 import { defaultApiUrl } from "../../config/config";
 
 export const fetchUsers = () => {
@@ -17,15 +19,7 @@ export const fetchUsers = () => {
       {
         loadedUsers.push({
           key,
-          name:resData[key].name,
-          email:resData[key].email,
-          address:resData[key].address,
-          age:resData[key].age,
-          profilePic:resData[key].profilePic,
-          bloodGroup:resData[key].bloodGroup,
-          userId:resData[key].userId,
-          userType:resData[key].userType,
-          phone:resData[key].phone,
+          ...resData[key],
         })
       }
       const loggedUser=loadedUsers.find(user => user.userId === userId);
@@ -35,6 +29,29 @@ export const fetchUsers = () => {
     }
   };
 };
+
+export const updateUser=(id,updatedData)=>{
+  return async (dispatch, getState)=>{
+    const token = getState().auth.token;
+    const response= await fetch(`${defaultApiUrl}users/${id}.json?auth=${token}`,{
+      method:"PATCH",
+      headers:{
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ...updatedData
+      })
+    });
+    if(!response.ok)
+    {
+      throw Error("Something Went Wrong Try Again Later :)")
+    }
+    dispatch({type: UPDATE_USER,id,updatedData})
+  }
+}
+export const clearLoggedInUser=()=>{
+  return{ type: LOGOUT}
+}
 
 export const addUser = (userData) => {
   return async (dispatch, getState) => {

@@ -10,6 +10,7 @@ const tabsBottomNavigation = (props) => {
     <Tab.Navigator
       screenOptions={{
         headerShown:false,
+        tabBarHideOnKeyboard:true,
         tabBarShowLabel: false,
         tabBarActiveTintColor:"green",
         tabBarInactiveTintColor:"#ffffff",

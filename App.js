@@ -1,4 +1,4 @@
-import React,{ useEffect } from "react";
+import React, { useEffect } from "react";
 import AppNavigator from "./navigation/AppNavigator";
 import { LogBox } from "react-native";
 import ReduxThunk from "redux-thunk";
@@ -6,20 +6,33 @@ import { Provider } from "react-redux";
 import { applyMiddleware, combineReducers } from "redux";
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./store/reducers/auth";
-import users from "./store/reducers/users";
-const rootReducer=combineReducers({
-  auth:authReducer,
-  user:users,
+import userReducer from "./store/reducers/users";
+import appointmentReducer from "./store/reducers/appointment";
+const rootReducer = combineReducers({
+  auth: authReducer,
+  user: userReducer,
+  appointment: appointmentReducer,
 });
-const store=configureStore({reducer:rootReducer},applyMiddleware(ReduxThunk))
+const store = configureStore(
+  {
+    reducer: rootReducer,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({ serializableCheck: false }),
+  },
+  applyMiddleware(ReduxThunk)
+);
 export default function App() {
   useEffect(() => {
     LogBox.ignoreLogs(["Animated:`useNativeDriver`"]);
     LogBox.ignoreLogs(["exported from 'deprecated-react-native-prop-types'."]);
-    LogBox.ignoreLogs(["componentWillReceiveProps has been renamed, and is not recommended for use."]);
-    LogBox.ignoreLogs(['AsyncStorage has been extracted from react-native core']);
+    LogBox.ignoreLogs([
+      "componentWillReceiveProps has been renamed, and is not recommended for use.",
+    ]);
+    LogBox.ignoreLogs([
+      "AsyncStorage has been extracted from react-native core",
+    ]);
   }, [LogBox]);
-  
+
   return (
     <Provider store={store}>
       <AppNavigator />

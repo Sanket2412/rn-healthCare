@@ -7,15 +7,14 @@ const NavigatorLoader = () => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
     useEffect(()=>{
-        const fetchingUsers=async()=>{
+          setTimeout(()=>{
             try {   
-                await dispatch(userActions.fetchUsers());
-            } catch (error) {
-                console.log(error.message);                
-            }
-            setIsLoading(false);
-        }
-        fetchingUsers();
+              dispatch(userActions.fetchUsers());
+         } catch (error) {
+             console.log(error.message);                
+         }
+         setIsLoading(false);
+          },2000);
     },[dispatch]);
   if (isLoading) {
     return (

@@ -65,7 +65,7 @@ export const PrescriptionNavigator = () => {
 export const AuthNavigator=()=>{
   return(
     <AuthStackNavigator.Navigator screenOptions={defaultScreenOptions}>
-      <AuthStackNavigator.Screen name="Auth" component={AuthScreen} options={{title:"Authentication"}}/>
+      <AuthStackNavigator.Screen name="Auth" component={AuthScreen} options={{ headerShown:false }}/>
       <AuthStackNavigator.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{ headerBackVisible:false}} />
     </AuthStackNavigator.Navigator>
   );

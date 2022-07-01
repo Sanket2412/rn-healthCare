@@ -18,7 +18,7 @@ import { background,bloodGroupData } from "../../constant/constants";
 import { Dropdown } from "react-native-material-dropdown-v2-fixed";
 import { TouchableOpacity,Text } from "react-native";
 import ProfilePicPicker from "../../component/UI/ProfilePicPicker";
-import { uploadImage } from "../../firebase/UploadImage";
+import AppHeader from "../../component/UI/AppHeader";
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 const formReducer = (state, action) => {
   if (action.type === FORM_INPUT_UPDATE) {
@@ -108,24 +108,24 @@ const AuthScreen = (props) => {
     setIsLoading(true);
     try {
       await dispatch(action);
-      if (isSignup && !isError) {
-        await dispatch(
-          userActions.addUser({
-            name: formState.inputValues.name,
-            age: formState.inputValues.age,
-            phone: formState.inputValues.phone,
-            userType:"patient",
-            bloodGroup: formState.inputValues.bloodGroup,
-            email: formState.inputValues.email,
-            profilePic: profilePic,
-            address: formState.inputValues.address,
-          })
-        );
-      }
     } catch (err) {
       setIsError(true);
       setError(err.message);
       setIsLoading(false);
+    }
+    if (isSignup && !isError) {
+      dispatch(
+        userActions.addUser({
+          name: formState.inputValues.name,
+          age: formState.inputValues.age,
+          phone: formState.inputValues.phone,
+          userType:"patient",
+          bloodGroup: formState.inputValues.bloodGroup,
+          email: formState.inputValues.email,
+          profilePic: profilePic,
+          address: formState.inputValues.address,
+        })
+      );
     }
   };
   const inputChangeHandler = useCallback(
@@ -141,6 +141,7 @@ const AuthScreen = (props) => {
   );
   return (
     <ImageBackground source={{ uri: background }} style={styles.screen}>
+      <AppHeader />
       <Snackbar
         visible={isError}
         duration={5000}

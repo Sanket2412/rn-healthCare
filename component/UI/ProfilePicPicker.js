@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Snackbar } from "react-native-paper";
+import { Button } from "react-native-paper";
 import { Image, View, TouchableOpacity } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { defaultAvatar } from "../../constant/constants";
@@ -7,12 +7,34 @@ import * as Firebase from "firebase";
 import { firebaseConfig } from "../../config/config";
 
 const ProfilePicPicker = (props) => {
-  const [image, setImage] = useState(defaultAvatar);
+  let defaultPic="";
+  if(props.defaultPic)
+  {
+    defaultPic=props.defaultPic;
+  }
+  else
+  {
+    defaultPic=defaultAvatar
+  }
+  const [image, setImage] = useState(defaultPic);
   const [isUploading, setIsUploading] = useState(false);
-  const [uploadSuccess, setUploadSuccess] = useState(false);
   const uploadImage = async () => {
     if (!Firebase.apps.length) {
       Firebase.initializeApp(firebaseConfig);
+    }
+    if(props.update)
+    {
+      if(image === props.defaultPic)
+      {
+        return;
+      }
+      console.log(props.defaultPic);
+      const deleteRef= Firebase.storage().refFromURL(props.defaultPic);
+      deleteRef.delete().then(function(){
+        console.log("File Deleted");
+      }).catch(function (error){
+        console.log(error);
+      });
     }
     const blob = await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
@@ -42,7 +64,6 @@ const ProfilePicPicker = (props) => {
       },
       () => {
         snapshot.snapshot.ref.getDownloadURL().then((downloadUrl) => {
-          setUploadSuccess(true);
           setIsUploading(false);
           setImage(downloadUrl);
           blob.close();
@@ -70,9 +91,9 @@ const ProfilePicPicker = (props) => {
     }
   }
   useEffect(() => {
-    if(image === defaultAvatar)
+    if(image.startsWith("file://"))
     {
-      props.onProfileUpdate(null,isUploading);
+      props.onProfileUpdate(defaultAvatar,isUploading);
     }
     else
     {
@@ -88,30 +109,15 @@ const ProfilePicPicker = (props) => {
         paddingVertical: 10,
       }}
     >
-      <Snackbar
-        visible={uploadSuccess}
-        duration={5000}
-        onDismiss={() => {
-          setUploadSuccess(false);
-        }}
-        action={{
-          label: "Undo",
-          onPress: () => {
-            setUploadSuccess(false);
-          },
-        }}
-      >
-        Image Uploaded Successfully
-      </Snackbar>
       <View style={{ paddingBottom: 10 }}>
-        <TouchableOpacity onPress={pickImage}>
+        <TouchableOpacity onPress={pickImage} disabled={props.update ? !props.isEdit : false }>
           <Image
             source={{ uri: image }}
             style={{ width: 100, height: 100, borderRadius: 50 }}
           />
         </TouchableOpacity>
       </View>
-      <Button
+      {!props.update ? <Button
         mode="contained"
         loading={isUploading}
         color="lightblue"
@@ -119,8 +125,17 @@ const ProfilePicPicker = (props) => {
         disabled={image === defaultAvatar}
         onPress={uploadImage}
       >
-        {!isUploading ? "Upload Pic" : null}
-      </Button>
+        {!isUploading ? "Upload Pic" : ""}
+      </Button> : props.isEdit ? <Button
+        mode="contained"
+        loading={isUploading}
+        color="orange"
+        style={{ color: "white" }}
+        disabled={image === defaultAvatar}
+        onPress={uploadImage}
+      >
+        {!isUploading ? "Upload Pic" : ""}
+      </Button> : null}
     </View>
   );
 };

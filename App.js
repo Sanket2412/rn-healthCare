@@ -7,6 +7,7 @@ import { applyMiddleware, combineReducers } from "redux";
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./store/reducers/auth";
 import userReducer from "./store/reducers/users";
+import 'react-native-gesture-handler';
 import appointmentReducer from "./store/reducers/appointment";
 const rootReducer = combineReducers({
   auth: authReducer,

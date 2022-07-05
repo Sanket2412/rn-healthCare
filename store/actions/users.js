@@ -30,6 +30,38 @@ export const fetchUsers = () => {
   };
 };
 
+export const handlerRemoveFamilyMember=(removingData)=>{
+  return async(dispatch,getState)=>{
+    const token=getState().auth.token;
+    const response= await fetch(`${defaultApiUrl}users/${removingData.key}.json?auth=${token}`,{
+      method:"PATCH",
+      headers:{
+        "Content-Type":"application/json",
+      },
+      body:JSON.stringify({
+        familyMembers:removingData.familyMembers
+      })
+    });
+  }
+}
+
+export const handlerAddFamilyMember=(loggedEmail,familyArray)=>{
+  return async (dispatch, getState)=>{
+    const token = getState().auth.token;
+    familyArray.forEach(async (element) => {
+       await fetch(`${defaultApiUrl}users/${element.key}.json?auth=${token}`,{
+        method:"PATCH",
+        headers:{
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          familyMembers: element.familyMembers.concat(loggedEmail)
+        })
+      });
+    });
+  }
+}
+
 export const updateUser=(id,updatedData)=>{
   return async (dispatch, getState)=>{
     const token = getState().auth.token;

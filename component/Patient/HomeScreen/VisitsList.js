@@ -40,8 +40,13 @@ const VisitsList = (props) => {
       <Card elevation={20} style={{ borderRadius: 15 }}>
         <Card.Title
           title="Visit Log"
+          subtitle="Please Visit Between 11 AM to 2 PM"
           style={styles.cardTitle}
           titleStyle={{
+            color: "white",
+            alignSelf: "center",
+          }}
+          subtitleStyle={{
             color: "white",
             alignSelf: "center",
           }}

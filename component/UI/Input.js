@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 import { Button } from "react-native-paper";
 import { StyleSheet, View, Text, TextInput } from "react-native";
 const INPUT_CHANGE = "INPUT_CHANGE";
@@ -22,6 +22,13 @@ const inputReducer = (state, action) => {
 };
 
 const Input = (props) => {
+  const inputRef=useRef();
+  useEffect(()=>{
+    if(props.clear)
+    {
+      inputRef.current.clear();
+    }
+  },[props.clear])
   const [inputState, dispatch] = useReducer(inputReducer, {
     value: props.initialValue ? props.initialValue : "",
     isValid: props.initiallyValid,
@@ -84,6 +91,7 @@ const Input = (props) => {
         value={inputState.value}
         onChangeText={textChangeHandler}
         keyboardAppearance="default"
+        ref={inputRef}
       />
       {props.password ? <Button  color="black" icon={showPassword ? "eye": "eye-off"} onPress={()=>{ setShowPassword(!showPassword)}}/>: null}</View>
       {!inputState.isValid && inputState.touched && (

@@ -88,6 +88,7 @@ const HomeScreen = (props) => {
     const bookingData = {
       bookedDate: date,
       enabled: true,
+      status:"pending",
       bookingCreatedDate: new Date().toISOString(),
     };
     try {

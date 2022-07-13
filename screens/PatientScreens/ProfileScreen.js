@@ -5,13 +5,11 @@ import {
   ScrollView,
   StyleSheet,
   Dimensions,
-  View,
   Text,
   TouchableOpacity,
-  KeyboardAvoidingView,
   Alert,
 } from "react-native";
-import { List, Snackbar } from "react-native-paper";
+import { List } from "react-native-paper";
 import {
   updateUser,
   fetchUsers,
@@ -25,7 +23,6 @@ import Input from "../../component/UI/Input";
 import InfoView from "../../component/UI/InfoView";
 const FORM_INPUT_UPDATE = "FORM_INPUT_UPDATE";
 const CLEAR_EMAILS="CLEAR_EMAILS";
-const { height } = Dimensions.get("window");
 const formReducer = (state, action) => {
   if (action.type === FORM_INPUT_UPDATE) {
     const updatedValues = {
@@ -173,9 +170,9 @@ const ProfileScreen = () => {
     try {
       dispatch(updateUser(user.key, updatedData));
       dispatchFormState({type:CLEAR_EMAILS});
-      setUpdateSuccess(true);
       setTimeout(()=>{
         dispatch(fetchUsers());
+        setUpdateSuccess(true);
       },3000);
     } catch (error) {
       console.log(error);
@@ -235,6 +232,22 @@ const ProfileScreen = () => {
       style={{ flex: 1, justifyContent: "flex-start", alignItems: "center" }}
     >
       <Card elevation={50} style={styles.cardConatiner}>
+        {addFamilyError.isError ? Alert.alert("Oops!",addFamilyError.message,[
+          {
+            text:"OK",
+            onPress:()=>{
+              setAddFamilyError({isError:false,message:""})
+            }
+          }
+        ]) : null}
+        {updateSuccess ? Alert.alert("Yay!","Profile Updated Successfully",[
+          {
+            text:"OK",
+            onPress:()=>{
+              setUpdateSuccess(false);
+            }
+          }
+        ]) : null}
         <Card.Title
           title="PROFILE"
           titleStyle={{ color: "green", textAlign: "left", fontSize: 30 }}
@@ -396,26 +409,6 @@ const ProfileScreen = () => {
                 </Card.Actions>
               </Fragment>
             )}
-            <Snackbar
-            visible={addFamilyError.isError || updateSuccess}
-            duration={7000}
-            onDismiss={() => {
-              setUpdateSuccess(false);
-              setAddFamilyError({ isError: false, message: "" });
-            }}
-            wrapperStyle={{
-              top: height - 250,
-            }}
-            action={{
-              label: "Close",
-              onPress: () => {
-                setUpdateSuccess(false);
-                setAddFamilyError({ isError: false, message: "" });
-              },
-            }}
-          >
-            {updateSuccess ? "Data Updated Successfully" : addFamilyError.message}
-          </Snackbar>
           </Card.Content>
         </ScrollView>
       </Card>

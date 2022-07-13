@@ -3,6 +3,33 @@ import { defaultApiUrl } from "../../config/config";
 export const FETCH_APPOINTMENT = "FETCH_APPOINTMENT";
 export const BOOK_APPOINTMENT = "BOOK_APPOINTMENT";
 export const CANCEl_APPOINTMENT = "CANCEl_APPOINTMENT";
+export const UPDATE_APPOINTMENT ="UPDATE_APPOINTMENT";
+
+
+export const updateAppointment=(id,status)=>{
+    return async (dispatch,getState)=>{
+      try {
+        const token= getState().auth.token;
+        const response= await fetch(`${defaultApiUrl}appointments/${id}.json?auth=${token}`,{
+          method: "PATCH",
+          headers:{
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            status,
+          }),
+        })
+        const resData = await response.json();
+      if (!response.ok) {
+        throw new Error("Something Went Wrong");
+      }
+      dispatch({ type: UPDATE_APPOINTMENT, key: id, status });
+      } catch (error) {
+        throw error;
+      }
+    }
+}
+
 
 export const cancelAppointment = (key) => {
   return async (dispatch, getState) => {
@@ -45,6 +72,7 @@ export const bookAppointment = (bookingData) => {
           body: JSON.stringify({
             ...bookingData,
             userId: user.key,
+            patientName:user.name
           }),
         }
       );

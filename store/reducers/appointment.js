@@ -1,4 +1,4 @@
-import { BOOK_APPOINTMENT,CANCEl_APPOINTMENT,FETCH_APPOINTMENT } from "../actions/appointment";
+import { BOOK_APPOINTMENT,CANCEl_APPOINTMENT,FETCH_APPOINTMENT, UPDATE_APPOINTMENT } from "../actions/appointment";
 
 const initialState={
     appointments:[],
@@ -17,6 +17,10 @@ export default (state=initialState,action)=>{
         case CANCEl_APPOINTMENT: return{
             ...state,
             appointments: state.appointments.map(item => item.key===action.key ? {...item,enabled:false} : item)
+        }
+        case UPDATE_APPOINTMENT: return{
+            ...state,
+            appointments: state.appointments.map(item => item.key===action.key ? {...item, status:action.status} : item)   
         }
         default:
             return state;
